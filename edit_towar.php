@@ -26,11 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nazwa = $_POST['nazwa'];
     $ilosc = $_POST['ilosc'];
     $kolor = $_POST['kolor'];
+    $rozmiar = $_POST['rozmiar']; // Dodajemy obsługę rozmiaru
     $cena = $_POST['cena'];
 
-    $updateQuery = "UPDATE towary SET nazwa='$nazwa', ilosc='$ilosc', kolor='$kolor', cena='$cena' WHERE id=$id";
+    $updateQuery = "UPDATE towary SET nazwa='$nazwa', ilosc='$ilosc', kolor='$kolor', rozmiar='$rozmiar', cena='$cena' WHERE id=$id"; // Uwzględniamy pole rozmiaru
     if ($baza->query($updateQuery)) {
-        // Redirect to the specified page after a successful update
+        // Przekieruj na określoną stronę po pomyślnym zaktualizowaniu
         header("Location: http://localhost/sklep-main/index.php?page=showtowary");
         exit();
     } else {
@@ -57,10 +58,11 @@ $baza->close();
         <h3>Edytuj Towar</h3>
         <form method="POST" action="edit_towar.php">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($towar['id'] ?? ''); ?>">
-            Nazwa produktu: <input type="text" name="nazwa" value="<?php echo htmlspecialchars($towar['nazwa'] ?? ''); ?>" autocomplete="off"><br>
-            Ilość produktu:&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="ilosc" value="<?php echo htmlspecialchars($towar['ilosc'] ?? ''); ?>" autocomplete="off"><br>
-            Kolor produktu:&nbsp;&nbsp;&nbsp; <input type="text" name="kolor" value="<?php echo htmlspecialchars($towar['kolor'] ?? ''); ?>" autocomplete="off"><br>
-            Cena produktu:&nbsp;&nbsp;&nbsp; <input type="text" name="cena" value="<?php echo htmlspecialchars($towar['cena'] ?? ''); ?>" autocomplete="off"><br>
+            Nazwa produktu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="nazwa" value="<?php echo htmlspecialchars($towar['nazwa'] ?? ''); ?>" autocomplete="off"><br>
+            Ilość produktu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="ilosc" value="<?php echo htmlspecialchars($towar['ilosc'] ?? ''); ?>" autocomplete="off"><br>
+            Kolor produktu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="kolor" value="<?php echo htmlspecialchars($towar['kolor'] ?? ''); ?>" autocomplete="off"><br>
+            Rozmiar produktu:&nbsp;&nbsp;&nbsp; <input type="text" name="rozmiar" value="<?php echo htmlspecialchars($towar['rozmiar'] ?? ''); ?>" autocomplete="off"><br> <!-- Dodaj pole rozmiaru -->
+            Cena produktu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="cena" value="<?php echo htmlspecialchars($towar['cena'] ?? ''); ?>" autocomplete="off"><br>
             <button type="submit" id="button1">ZAPISZ</button>
         </form>
     </div>

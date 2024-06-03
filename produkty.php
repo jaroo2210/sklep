@@ -23,8 +23,19 @@
       <option value="Czerwony">Czerwony</option>
       <option value="Niebieski">Niebieski</option>
     </select>
+    <br>Rozmiar:
+    <input type="radio" id="size1_S" name="size1" value="S">
+    <label for="size1_S">S</label>
+    <input type="radio" id="size1_M" name="size1" value="M">
+    <label for="size1_M">M</label>
+    <input type="radio" id="size1_L" name="size1" value="L">
+    <label for="size1_L">L</label>
+    <input type="radio" id="size1_XL" name="size1" value="XL">
+    <label for="size1_XL">XL</label>
+    <input type="radio" id="size1_XXL" name="size1" value="XXL">
+    <label for="size1_XXL">XXL</label>
     <br>Ilość produktu:&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="f_ilosc1" placeholder="wpisz ilosc" autocomplete="off">
-    <br><button type="button" onclick="addToCart('T-shirt', document.getElementById('kolor1').value, document.getElementsByName('f_ilosc1')[0].value, 39.99)">DODAJ</button>
+    <br><button type="button" onclick="addToCart('T-shirt', document.getElementById('kolor1').value, document.querySelector('input[name=\'size1\']:checked').value, document.getElementsByName('f_ilosc1')[0].value, 39.99)">DODAJ</button>
   </div>
 </details>
 <hr>
@@ -43,8 +54,19 @@
       <option value="Czerwony">Czerwony</option>
       <option value="Niebieski">Niebieski</option>
     </select>
+    <br>Rozmiar:
+    <input type="radio" id="size2_S" name="size2" value="S">
+    <label for="size2_S">S</label>
+    <input type="radio" id="size2_M" name="size2" value="M">
+    <label for="size2_M">M</label>
+    <input type="radio" id="size2_L" name="size2" value="L">
+    <label for="size2_L">L</label>
+    <input type="radio" id="size2_XL" name="size2" value="XL">
+    <label for="size2_XL">XL</label>
+    <input type="radio" id="size2_XXL" name="size2" value="XXL">
+    <label for="size2_XXL">XXL</label>
     <br>Ilość produktu:&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="f_ilosc2" placeholder="wpisz ilosc" autocomplete="off">
-    <br><button type="button" onclick="addToCart('Bluza', document.getElementById('kolor2').value, document.getElementsByName('f_ilosc2')[0].value, 79.99)">DODAJ</button>
+    <br><button type="button" onclick="addToCart('Bluza', document.getElementById('kolor2').value, document.querySelector('input[name=\'size2\']:checked').value, document.getElementsByName('f_ilosc2')[0].value, 79.99)">DODAJ</button>
   </div>
 </details>
 <hr>
@@ -63,8 +85,19 @@
       <option value="Czerwony">Czerwony</option>
       <option value="Niebieski">Niebieski</option>
     </select>
+    <br>Rozmiar:
+    <input type="radio" id="size3_S" name="size3" value="S">
+    <label for="size3_S">S</label>
+    <input type="radio" id="size3_M" name="size3" value="M">
+    <label for="size3_M">M</label>
+    <input type="radio" id="size3_L" name="size3" value="L">
+    <label for="size3_L">L</label>
+    <input type="radio" id="size3_XL" name="size3" value="XL">
+    <label for="size3_XL">XL</label>
+    <input type="radio" id="size3_XXL" name="size3" value="XXL">
+    <label for="size3_XXL">XXL</label>
     <br>Ilość produktu:&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="f_ilosc3" placeholder="wpisz ilosc" autocomplete="off">
-    <br><button type="button" onclick="addToCart('Kurtka', document.getElementById('kolor3').value, document.getElementsByName('f_ilosc3')[0].value, 99.99)">DODAJ</button>
+    <br><button type="button" onclick="addToCart('Kurtka', document.getElementById('kolor3').value, document.querySelector('input[name=\'size3\']:checked').value, document.getElementsByName('f_ilosc3')[0].value, 99.99)">DODAJ</button>
   </div>
 </details>
 <hr>
@@ -87,12 +120,13 @@ if (isset($_SESSION['user_type'])) {
 <!-- Pozostała część kodu HTML -->
 
 <script>
-  function addToCart(name, color, quantity, price) {
+  function addToCart(name, color, size, quantity, price) {
     var item = document.createElement("li");
-    var totalPrice = price * quantity; 
-    item.textContent = name + " - " + color + " - " + quantity + " szt. - Cena: " + totalPrice.toFixed(2) + " zł";
+    var totalPrice = price * quantity;
+    item.textContent = name + " - " + color + " - " + size + " - " + quantity + " szt. - Cena: " + totalPrice.toFixed(2) + " zł";
     item.setAttribute("data-price", totalPrice); 
     item.setAttribute("data-unit-price", price);
+    item.setAttribute("data-size", size); // Dodajemy atrybut data-size
     document.getElementById("cart-items").appendChild(item);
     updateTotal();
   }
@@ -113,32 +147,31 @@ if (isset($_SESSION['user_type'])) {
     items.forEach(function(item) {
         var itemName = item.textContent.split(" - ")[0];
         var itemColor = item.textContent.split(" - ")[1];
-        var itemQuantity = item.textContent.split(" - ")[2].split(" ")[0];
+        var itemSize = item.getAttribute("data-size"); // Pobieramy rozmiar z atrybutu data-size
+        var itemQuantity = item.textContent.split(" - ")[3].split(" ")[0];
         var itemTotalPrice = item.getAttribute("data-price");
-        var itemUnitPrice = item.getAttribute("data-unit-price"); // Pobierz cenę jednostkową
+        var itemUnitPrice = item.getAttribute("data-unit-price");
         cartData.push({
             name: itemName,
             color: itemColor,
+            size: itemSize,
             quantity: itemQuantity,
             totalPrice: itemTotalPrice,
-            unitPrice: itemUnitPrice, // Dodaj cenę jednostkową
+            unitPrice: itemUnitPrice,
             userId: <?php echo $_SESSION['user_id'] ?? 'null'; ?>
         });
     });
 
-    // Wysyłanie danych do serwera za pomocą AJAX
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "?page=infoklient", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // Przekierowanie do nowej strony po otrzymaniu odpowiedzi
             window.location.href = "?page=infoklient";
         }
     };
     xhr.send(JSON.stringify(cartData));
   }
 </script>
-
 </body>
 </html>

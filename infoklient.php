@@ -15,18 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['imie_klienta'], $_POST
     $imie_klienta = mysqli_real_escape_string($baza, $_POST['imie_klienta']);
     $adres_klienta = mysqli_real_escape_string($baza, $_POST['adres_klienta']);
     $telefon_klienta = mysqli_real_escape_string($baza, $_POST['telefon_klienta']);
+    $user_id = $_SESSION['user_id']; // Pobranie user_id z sesji
 
-    $insertQuery = "INSERT INTO klienci (nazwa, adres, telefon) VALUES ('$imie_klienta', '$adres_klienta', '$telefon_klienta')";
+    $insertQuery = "INSERT INTO klienci (nazwa, adres, telefon, user_id) VALUES ('$imie_klienta', '$adres_klienta', '$telefon_klienta', '$user_id')";
     if ($baza->query($insertQuery)) {
         $baseUrl = "http://" . $_SERVER['HTTP_HOST'] . "/sklep-main";
-        header("Location: $baseUrl/?page=showtowary");
+        header("Location: $baseUrl/?page=showklienci");
         exit();
     } else {
         echo "Błąd przy dodawaniu klienta: " . $baza->error . "</p>";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pl-PL">
 
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['imie_klienta'], $_POST
         <h2>Wprowadź dane klienta</h2>
        
         <?php addTowary(); ?>
-        <form action="?page=showklienci" method="POST">
+        <form method="POST">
             Imię i Nazwisko: <input type="text" name="imie_klienta"><br>
             Adres:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="adres_klienta"><br>
             Telefon:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="telefon_klienta"><br>

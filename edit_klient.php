@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updateQuery = "UPDATE klienci SET nazwa='$nazwa', adres='$adres', telefon='$telefon' WHERE id=$id";
     if ($baza->query($updateQuery)) {
         // Redirect to the specified page after a successful update
-        header("Location: http://localhost/sklep-main/index.php?page=showklienci");
+        header("Location: http://localhost/sklep-main/index.php?page=showtowary");
         exit();
     } else {
         echo "Błąd przy aktualizacji klienta: " . $baza->error;
